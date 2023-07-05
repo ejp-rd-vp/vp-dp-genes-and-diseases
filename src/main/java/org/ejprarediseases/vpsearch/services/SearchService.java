@@ -1,5 +1,6 @@
 package org.ejprarediseases.vpsearch.services;
 
+import jakarta.transaction.Transactional;
 import org.ejprarediseases.vpsearch.models.gene.Gene;
 import org.ejprarediseases.vpsearch.models.RareDisease;
 import org.ejprarediseases.vpsearch.models.SearchResult;
@@ -18,14 +19,15 @@ public class SearchService {
         this.geneRepository = geneRepository;
         this.diseaseRepository = diseaseRepository;
     }
-
-  public SearchResult getSearchResults(String query, int page, int size) {
+    @Transactional
+    public SearchResult getSearchResults(String query, int page, int size) {
         SearchResult searchResult = new SearchResult();
         searchResult.setGenes(getGenesSearchResults(query, page, size));
         searchResult.setRareDiseases(getDiseasesSearchResults(query, page, size));
         return searchResult;
     }
 
+    @Transactional
     private Set<Gene> getGenesSearchResults(String query, int page, int size) {
         Set<Gene> genes = new HashSet<>();
         genes.addAll(geneRepository.findByHgncIdEqualsIgnoreCase(query, PageRequest.of(0, 1)));
@@ -46,6 +48,7 @@ public class SearchService {
         }
         return genes;
     }
+    @Transactional
     private Set<RareDisease> getDiseasesSearchResults(String query, int page, int size) {
         Set<RareDisease> rareDiseases = new HashSet<>();
         rareDiseases.addAll(diseaseRepository.findByOrphaCodeEqualsIgnoreCase(query, PageRequest.of(0, 1)));
