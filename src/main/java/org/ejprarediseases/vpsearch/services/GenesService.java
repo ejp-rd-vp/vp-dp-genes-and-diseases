@@ -22,7 +22,7 @@ public class GenesService {
             Pattern p = Pattern.compile("Orphanet_(\\d*)");
             Matcher m = p.matcher(response);
             while (m.find()) {
-                orphaCodes.add("Orphanet_" + m.group(1));
+                orphaCodes.add(m.group(1));
             }
         } catch (Exception e) {
             // TODO handle exception
